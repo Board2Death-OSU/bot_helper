@@ -7,7 +7,7 @@ class Client(discord.Client):
     def __init__(self):
         self.on_message_functions = []
         self.on_message_args = []
-        super()
+        super().__init__()
 
     def register_on_message_callback(self, fun, args):
         """
@@ -23,8 +23,6 @@ class Client(discord.Client):
         """
         self.on_message_functions.append(fun)
         self.on_message_args.append(args)
-
-        print('Successfully Registered {}'.format(fun.__name__))
 
     async def on_ready(self):
         print('Successfully Logged in as {0}', self.user)
@@ -45,18 +43,10 @@ class Client(discord.Client):
 
         content = str(message.content)
         for fun, args in zip(self.on_message_functions, self.on_message_args):
-            print('Exectuing {0} with these args: {1}'.format(
-                fun.__name__, args))
             value = fun(message, *args)
             if value is not None:
                 responses.append(value)
+
         for (response, channel) in responses:
-            await channel.send(response)
-
-
-def temp(a):
-    print('x')
-
-
-temp = Client()
-temp.register_on_message_callback(temp, [1])
+            if response is not None and response != '':
+                await channel.send(response)
