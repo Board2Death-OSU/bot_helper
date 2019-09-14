@@ -11,7 +11,7 @@ class Client(discord.Client):
 
     def register_on_message_callback(
             self,
-            fun: Callable[[discord.Message, any], Tuple[str, discord.Channel]],
+            fun: Callable[[discord.Message, any], Tuple[str, discord.TextChannel]],
             args: List[any]
     ) -> None:
         """
@@ -26,7 +26,7 @@ class Client(discord.Client):
         self.on_message_args.append(args)
 
     async def on_ready(self) -> None:
-        print('Successfully Logged in as {0}', self.user)
+        print('Successfully Logged in as {0}'.format(self.user))
 
     async def on_message(self, message: discord.Message) -> None:
         """
@@ -39,7 +39,7 @@ class Client(discord.Client):
             return
 
         # Responses to be sent after processing all messages.
-        responses: List[Tuple[str, discord.Channel]] = []
+        responses: List[Tuple[str, discord.TextChannel]] = []
 
         content: str = str(message.content)
         for fun, args in zip(self.on_message_functions, self.on_message_args):
