@@ -1,5 +1,5 @@
-
 import discord
+from typing import Callable, List, Dict, Tuple
 
 
 class Client(discord.Client):
@@ -9,13 +9,14 @@ class Client(discord.Client):
         self.on_message_args = []
         super().__init__()
 
-    def register_on_message_callback(self, fun, args):
+    def register_on_message_callback(
+            self,
+            fun: Callable[[discord.Message, any], Tuple[str, discord.Channel]],
+            args: List[any]
+    ) -> None:
         """
         This function adds a call back function to be executed when the
         client receives a message.
-
-        The function expects a function as the first argument, and an array of arguments,
-        that will be unpacked for the function call.
 
         When called, the function will receive the discord message, then the arguments.
         The function should return a tuple containing the message to send, and then the channel
@@ -24,11 +25,10 @@ class Client(discord.Client):
         self.on_message_functions.append(fun)
         self.on_message_args.append(args)
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         print('Successfully Logged in as {0}', self.user)
-        pass
 
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message) -> None:
         """
         Called when a message is received, executed all registered callback functions,
         passing in the message and there arguments.
@@ -39,9 +39,9 @@ class Client(discord.Client):
             return
 
         # Responses to be sent after processing all messages.
-        responses = []
+        responses: List[Tuple[str, discord.Channel]] = []
 
-        content = str(message.content)
+        content: str = str(message.content)
         for fun, args in zip(self.on_message_functions, self.on_message_args):
             value = fun(message, *args)
             if value is not None:
