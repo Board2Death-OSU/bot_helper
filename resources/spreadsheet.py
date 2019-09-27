@@ -90,6 +90,62 @@ class Spreadsheet:
                                                     valueInputOption="USER_ENTERED",
                                                     body=body).execute()
 
+    def write_column(
+            self,
+            page: str,
+            column: str,
+            row_start: str,
+            row_end: str,
+            data: List[any]
+    ) -> None:
+        """
+        Writes the values in data, on the designated page, in the specified row,
+        from column start to column end
+        """
+        location = page + "!" + column + row_start + ":" + column + row_end
+        values = [[d] for d in data]
+        body = {'values': values}
+        self.service.spreadsheets().values().update(spreadsheetId=self.spreadsheet_id,
+                                                    range=location,
+                                                    valueInputOption="USER_ENTERED",
+                                                    body=body).execute()
+
+    def read_block(
+        self,
+        page: str,
+        column_start: str,
+        column_end: str,
+        row_start: str,
+        row_end: str
+    ) -> List[List[str]]:
+        """
+        Reads a Rectangular block of data in the specified sheet.
+        """
+        location = page + "!" + column_start + row_start + ":" + column_end + row_end
+        result = self.service.spreadsheets().values().get(
+            spreadsheetId=self.spreadsheet_id, range=location).execute()
+        result = result.get('values', [])
+        return result
+
+    def write_block(
+        self,
+        page: str,
+        column_start: str,
+        column_end: str,
+        row_start: str,
+        row_end: str,
+        data: List[List[str]]
+    ) -> None:
+        """
+        Writes a rectangular block of data in the designated sheet
+        """
+        location = page + "!" + column_start + row_start + ":" + column_end + row_end
+        body = {'values': data}
+        self.service.spreadsheets().values().update(spreadsheetId=self.spreadsheet_id,
+                                                    range=location,
+                                                    valueInputOption="USER_ENTERED",
+                                                    body=body).execute()
+
     def read_column(
         self,
         page: str,
