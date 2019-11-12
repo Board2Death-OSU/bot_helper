@@ -7,13 +7,13 @@ class ImageHandler:
 
     def __init__(self, images: List[str], keyword: str, channel):
         self.images = images
-        self.keyword = keyword
+        self.keyword = keyword.capitalize()
         self.channel = channel
 
     def get_call_back(self):
         def _call_back(message):
             channel = message.channel
-            message = message.content
+            message = message.content.capitalize()
             if str(channel) == self.channel:
                 if self.keyword in message:
                     index = random.randint(0, len(self.images) - 1)
