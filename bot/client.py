@@ -54,6 +54,8 @@ class Client(discord.Client):
         file_responses = []
 
         content: str = str(message.content)
+
+        # Loop Over Message Functions
         for fun, args in zip(self.on_message_functions, self.on_message_args):
             value = fun(message, *args)
             if value is not None:
@@ -70,4 +72,5 @@ class Client(discord.Client):
 
         for (response, channel) in file_responses:
             if response is not None and response != '':
+
                 await channel.send('', file=discord.File(response))
