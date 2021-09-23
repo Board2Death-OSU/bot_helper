@@ -2,7 +2,7 @@ from googleapiclient.discovery import build
 import datetime
 from httplib2 import Http
 from oauth2client import file, client, tools
-from typing import List
+from typing import List, Any
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 
 
@@ -39,7 +39,7 @@ class Spreadsheet:
         page: str,
         column: str,
         row: str,
-        value: any
+        value: Any
     ) -> None:
         """
         Writes data the specified column/row from the specified page from this spreadsheet.
@@ -76,7 +76,7 @@ class Spreadsheet:
             column_start: str,
             column_end: str,
             row: str,
-            data: List[any]
+            data: List[Any]
     ) -> None:
         """
         Writes the values in data, on the designated page, in the specified row,
@@ -96,7 +96,7 @@ class Spreadsheet:
             column: str,
             row_start: str,
             row_end: str,
-            data: List[any]
+            data: List[Any]
     ) -> None:
         """
         Writes the values in data, on the designated page, in the specified row,
